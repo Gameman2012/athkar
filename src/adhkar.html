@@ -266,14 +266,36 @@
 
     <script>
         const DATA_URL = 'https://raw.githubusercontent.com/Gameman2012/athkar/main/data/adhkar.json';
+        const CACHE_KEY = 'adhkar_cache';
+        const CACHE_TTL = 24 * 60 * 60 * 1000;
 
         let allAdhkar = [];
         let activeTag = 'الكل';
 
+        function getCached() {
+            try {
+                const c = JSON.parse(localStorage.getItem(CACHE_KEY));
+                if (c && Date.now() - c.ts < CACHE_TTL) return c.data;
+            } catch {}
+            return null;
+        }
+
+        function setCache(data) {
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
+        }
+
         async function loadAdhkar() {
+            const cached = getCached();
+            if (cached) {
+                allAdhkar = cached.adhkar;
+                renderFilters(cached.tags);
+                renderAdhkar(allAdhkar);
+                return;
+            }
             try {
                 const res = await fetch(DATA_URL);
                 const data = await res.json();
+                setCache(data);
                 allAdhkar = data.adhkar;
                 renderFilters(data.tags);
                 renderAdhkar(allAdhkar);
