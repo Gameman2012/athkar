@@ -4,7 +4,7 @@
 
 ## بنية مهمة
 
-- `src/` يحتوي صفحات HTML: index.html, adhkar.html, dhikr.html, quran.html, wird.html, ahadith.html, salah.html
+- `src/` يحتوي صفحات HTML: index.html, adhkar.html, dhikr.html, quran.html, wird.html, ahadith.html, salah.html, misbaha.html, tafsir.html
 - `data/adhkar.json` و `data/ahadith.json` — ملفات بيانات الأذكار والأحاديث
 
 ## حقائق غير واضحة من الأسماء
@@ -21,6 +21,8 @@
   - `https://cdn.islamic.network/quran/audio/128/ar.alafasy/{ayah_number}.mp3` للصوت
   - `https://quran.islam-db.com/public/data/pages/quranpages_1024/images/page{NNN}.png` لصور المصحف
 - `src/wird.html` يستخدم `https://quran.islam-db.com/public/data/pages/quranpages_1024/images/page{NNN}.png` — صفحة واحدة يومياً.
+- `src/misbaha.html` — مسبحة رقمية: عداد دائري مع Web Audio click + localStorage + 8 أذكار جاهزة.
+- `src/tafsir.html` — تدبر آية: آية عشوائية مع تفسير الجلالين (API: alquran.cloud). 30 آية مختارة.
 - البطاقات في `index.html` تستخدم `<a href="...">` لصفحات الموقع.
 
 ## أوامر

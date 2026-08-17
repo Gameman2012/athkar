@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تدبر آية — نور</title>
+    <meta name="description" content="تدبر آية قرآنية يومية مع تفسير الجلالين">
+    <meta property="og:title" content="تدبر آية — نور">
+    <meta property="og:description" content="تدبر آية قرآنية يومية مع تفسير الجلالين">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-card: #111827;
+            --bg-card-hover: #1a2332;
+            --gold: #d4a843;
+            --gold-light: #f0d48a;
+            --gold-dim: #8a6d2b;
+            --text-primary: #e8e0d0;
+            --text-secondary: #9a917e;
+            --border: #1e293b;
+            --green: #2d6a4f;
+        }
+
+        body {
+            font-family: 'Noto Naskh Arabic', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(212, 168, 67, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(45, 106, 79, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            padding: 48px 0 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-link {
+            color: var(--gold-dim);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+        }
+
+        header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .ayah-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 32px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ayah-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(212, 168, 67, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .ayah-ref {
+            font-family: 'Amiri', serif;
+            font-size: 1rem;
+            color: var(--gold-dim);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .ayah-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            line-height: 2.2;
+            color: var(--text-primary);
+            text-align: center;
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .ayah-text .bismillah {
+            display: block;
+            font-size: 1.3rem;
+            color: var(--gold-dim);
+            margin-bottom: 16px;
+        }
+
+        .ayah-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+        }
+
+        .action-btn {
+            font-family: 'Amiri', serif;
+            font-size: 0.95rem;
+            background: transparent;
+            color: var(--gold-dim);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+
+        .action-btn.playing {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 168, 67, 0.08);
+        }
+
+        .tafsir-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .tafsir-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.1rem;
+            color: var(--gold-dim);
+            margin-bottom: 16px;
+        }
+
+        .tafsir-text {
+            font-size: 1.15rem;
+            line-height: 2;
+            color: var(--text-primary);
+        }
+
+        .new-ayah-wrap {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .new-ayah-btn {
+            font-family: 'Amiri', serif;
+            font-size: 1rem;
+            background: rgba(212, 168, 67, 0.08);
+            color: var(--gold);
+            border: 1px solid var(--gold-dim);
+            border-radius: 12px;
+            padding: 10px 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .new-ayah-btn:hover {
+            background: rgba(212, 168, 67, 0.15);
+            border-color: var(--gold);
+        }
+
+        .new-ayah-btn:active {
+            transform: scale(0.96);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px 0;
+            color: var(--gold-dim);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--gold-dim);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 80px 0;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 640px) {
+            header {
+                padding: 36px 0 24px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .ayah-card {
+                padding: 28px 20px;
+            }
+
+            .ayah-text {
+                font-size: 1.4rem;
+                line-height: 2;
+            }
+
+            .tafsir-card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">→</a>
+            <h1>تدبر آية</h1>
+        </header>
+
+        <div id="content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <div>جارٍ تحميل الآية...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const AYAHS = [
+            { ref: 'سورة البقرة — 255', key: '2:255', noBismillah: true },
+            { ref: 'سورة البقرة — 286', key: '2:286', noBismillah: true },
+            { ref: 'سورة آل عمران — 185', key: '3:185', noBismillah: true },
+            { ref: 'سورة آل عمران — 190-191', key: '3:190', noBismillah: true },
+            { ref: 'سورة النساء — 85', key: '4:85', noBismillah: true },
+            { ref: 'سورة المائدة — 32', key: '5:32', noBismillah: true },
+            { ref: 'سورة يوسف — 101', key: '12:101', noBismillah: true },
+            { ref: 'سورة الإسراء — 23', key: '17:23', noBismillah: true },
+            { ref: 'سورة الإسراء — 82', key: '17:82', noBismillah: true },
+            { ref: 'سورة الكهف — 110', key: '18:110', noBismillah: true },
+            { ref: 'سورة مريم — 16', key: '19:16', noBismillah: false },
+            { ref: 'سورة طه — 14', key: '20:14', noBismillah: false },
+            { ref: 'سورة الأنبياء — 30', key: '21:30', noBismillah: false },
+            { ref: 'سورة المؤمنون — 1-11', key: '23:1', noBismillah: false },
+            { ref: 'سورة النور — 35', key: '24:35', noBismillah: false },
+            { ref: 'سورة الفرقان — 1', key: '25:1', noBismillah: false },
+            { ref: 'سورة الشعراء — 80-82', key: '26:80', noBismillah: false },
+            { ref: 'سورة العنكبوت — 69', key: '29:69', noBismillah: false },
+            { ref: 'سورة الروم — 30', key: '30:30', noBismillah: false },
+            { ref: 'سورة لقمان — 17', key: '31:17', noBismillah: false },
+            { ref: 'سورة السجدة — 9', key: '32:9', noBismillah: false },
+            { ref: 'سورة الأحزاب — 41', key: '33:41', noBismillah: false },
+            { ref: 'سورة ص — 26-28', key: '38:26', noBismillah: false },
+            { ref: 'سورة الزمر — 53', key: '39:53', noBismillah: false },
+            { ref: 'سورة الشورى — 11', key: '42:11', noBismillah: false },
+            { ref: 'سورة الجاثية — 13-14', key: '45:13', noBismillah: false },
+            { ref: 'سورة الحشر — 24', key: '59:24', noBismillah: false },
+            { ref: 'سورة الممتحنة — 8', key: '60:8', noBismillah: false },
+            { ref: 'سورة الملك — 1-3', key: '67:1', noBismillah: false },
+            { ref: 'سورة الإخلاص — 1-3', key: '112:1', noBismillah: false },
+        ];
+
+        const API = 'https://api.alquran.cloud/v1/ayah';
+
+        const content = document.getElementById('content');
+        let currentAudio = null;
+        let playingBtn = null;
+
+        function getRandomIndex() {
+            return Math.floor(Math.random() * AYAHS.length);
+        }
+
+        function createRef(key) {
+            const [surah, ayah] = key.split(':');
+            const surahNames = {
+                '2': 'البقرة', '3': 'آل عمران', '4': 'النساء', '5': 'المائدة',
+                '12': 'يوسف', '17': 'الإسراء', '18': 'الكهف', '19': 'مريم',
+                '20': 'طه', '21': 'الأنبياء', '23': 'المؤمنون', '24': 'النور',
+                '25': 'الفرقان', '26': 'الشعراء', '29': 'العنكبوت', '30': 'الروم',
+                '31': 'لقمان', '32': 'السجدة', '33': 'الأحزاب', '38': 'ص',
+                '39': 'زمر', '42': 'الشورى', '45': 'الجاثية', '59': 'الحشر',
+                '60': 'الممتحنة', '67': 'الملك', '112': 'الإخلاص'
+            };
+            return `سورة ${surahNames[surah] || surah} — ${ayah}`;
+        }
+
+        async function loadAyah(index) {
+            const ayah = AYAHS[index];
+            content.innerHTML = '<div class="loading"><div class="spinner"></div><div>جارٍ تحميل الآية...</div></div>';
+
+            try {
+                const [textRes, tafsirRes] = await Promise.all([
+                    fetch(`${API}/${ayah.key}/ar.alafasy`),
+                    fetch(`${API}/${ayah.key}/ar.jalalayn`)
+                ]);
+
+                const textData = await textRes.json();
+                const tafsirData = await tafsirRes.json();
+
+                if (textData.code !== 200 || tafsirData.code !== 200) {
+                    throw new Error('API error');
+                }
+
+                const text = textData.data;
+                const tafsir = tafsirData.data;
+
+                const refText = ayah.ref || createRef(ayah.key);
+
+                let html = `
+                    <div class="ayah-card">
+                        <div class="ayah-ref">${refText}</div>
+                        <div class="ayah-text">${text.text}</div>
+                        <div class="ayah-actions">
+                            <button class="action-btn" id="playBtn">
+                                &#9654; استمع
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tafsir-card">
+                        <div class="tafsir-title">تفسير الجلالين</div>
+                        <div class="tafsir-text">${tafsir.text}</div>
+                    </div>
+
+                    <div class="new-ayah-wrap">
+                        <button class="new-ayah-btn" onclick="randomAyah()">آية أخرى</button>
+                    </div>
+                `;
+
+                content.innerHTML = html;
+
+                const playBtn = document.getElementById('playBtn');
+                playBtn.addEventListener('click', () => toggleAudio(text.audio, playBtn));
+            } catch (err) {
+                content.innerHTML = '<div class="error-state">حدث خطأ أثناء تحميل الآية</div>';
+            }
+        }
+
+        function toggleAudio(url, btn) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+                if (playingBtn) {
+                    playingBtn.innerHTML = '&#9654; استمع';
+                    playingBtn.classList.remove('playing');
+                }
+                if (playingBtn === btn) {
+                    playingBtn = null;
+                    return;
+                }
+            }
+
+            currentAudio = new Audio(url);
+            currentAudio.play();
+            btn.innerHTML = '&#9646;&#9646; إيقاف';
+            btn.classList.add('playing');
+            playingBtn = btn;
+
+            currentAudio.onended = () => {
+                btn.innerHTML = '&#9654; استمع';
+                btn.classList.remove('playing');
+                currentAudio = null;
+                playingBtn = null;
+            };
+        }
+
+        function randomAyah() {
+            loadAyah(getRandomIndex());
+        }
+
+        // Load random ayah on each visit
+        loadAyah(getRandomIndex());
+    </script>
+
+</body>
+</html>
