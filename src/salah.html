@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مواقيت الصلاة — نور</title>
+    <meta name="description" content="مواقيت الصلاة اليومية حسب موقعك — الفجر والظهر والعصر والمغرب والعشاء">
+    <meta property="og:title" content="مواقيت الصلاة — نور">
+    <meta property="og:description" content="مواقيت الصلاة اليومية حسب موقعك">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-card: #111827;
+            --bg-card-hover: #1a2332;
+            --gold: #d4a843;
+            --gold-light: #f0d48a;
+            --gold-dim: #8a6d2b;
+            --text-primary: #e8e0d0;
+            --text-secondary: #9a917e;
+            --border: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Naskh Arabic', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(212, 168, 67, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(45, 106, 79, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            padding: 48px 0 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-link {
+            color: var(--gold-dim);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+        }
+
+        header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .date-card {
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .date-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(212, 168, 67, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .day-name {
+            font-family: 'Amiri', serif;
+            font-size: 1.6rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .hijri-date {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            position: relative;
+        }
+
+        .gregorian-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        .location-info {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            position: relative;
+        }
+
+        .prayer-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+
+        .prayer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .prayer-row:last-child {
+            border-bottom: none;
+        }
+
+        .prayer-row:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .prayer-row.current {
+            background: rgba(212, 168, 67, 0.08);
+            border-right: 3px solid var(--gold);
+        }
+
+        .prayer-name {
+            font-family: 'Amiri', serif;
+            font-size: 1.15rem;
+            color: var(--text-primary);
+        }
+
+        .prayer-time {
+            font-family: 'Amiri', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .prayer-row.current .prayer-name {
+            color: var(--gold);
+        }
+
+        .prayer-row.sunrise {
+            opacity: 0.6;
+        }
+
+        .prayer-row.sunrise .prayer-name {
+            font-size: 1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 64px 0;
+            color: var(--gold-dim);
+            font-size: 1.1rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--gold-dim);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 64px 0;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 640px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .prayer-row {
+                padding: 16px 20px;
+            }
+
+            .prayer-name {
+                font-size: 1.05rem;
+            }
+
+            .prayer-time {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">→</a>
+            <h1>مواقيت الصلاة</h1>
+        </header>
+
+        <div class="date-card" id="dateCard">
+            <div class="day-name" id="dayName">جاري التحميل...</div>
+            <div class="hijri-date" id="hijriDate"></div>
+            <div class="gregorian-date" id="gregorianDate"></div>
+            <div class="location-info" id="locationInfo"></div>
+        </div>
+
+        <div id="prayer-container">
+            <div class="loading">
+                <div class="spinner"></div>
+                <div>جارٍ تحميل المواقيت...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://api.aladhan.com/v1/timingsByIp?method=2';
+
+        const PRAYER_NAMES = {
+            'Fajr': 'الفجر',
+            'Sunrise': 'الشروق',
+            'Dhuhr': 'الظهر',
+            'Asr': 'العصر',
+            'Maghrib': 'المغرب',
+            'Isha': 'العشاء'
+        };
+
+        function format12(t) {
+            if (!t) return '—';
+            const [h, m] = t.split(':').map(Number);
+            const ampm = h >= 12 ? 'م' : 'ص';
+            const hour = h % 12 || 12;
+            return `${hour}:${String(m).padStart(2, '0')} ${ampm}`;
+        }
+
+        function timeToMin(t) {
+            const [h, m] = t.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function calculateLastThird(maghrib, fajr) {
+            if (!maghrib || !fajr) return null;
+            const [mh, mm] = maghrib.split(':').map(Number);
+            const [fh, fm] = fajr.split(':').map(Number);
+            let maghribMin = mh * 60 + mm;
+            let fajrMin = fh * 60 + fm;
+            if (fajrMin <= maghribMin) fajrMin += 24 * 60;
+            const nightDuration = fajrMin - maghribMin;
+            const lastThirdStart = maghribMin + (2 / 3) * nightDuration;
+            const totalMinutes = Math.round(lastThirdStart) % (24 * 60);
+            const h = Math.floor(totalMinutes / 60);
+            const m = totalMinutes % 60;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
+
+        function getCurrentPrayer(timings) {
+            const now = new Date();
+            const mins = now.getHours() * 60 + now.getMinutes();
+            const prayers = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+
+            for (let i = prayers.length - 1; i >= 0; i--) {
+                if (mins >= timeToMin(timings[prayers[i]])) {
+                    return prayers[i];
+                }
+            }
+            return 'Isha';
+        }
+
+        async function loadPrayerTimes() {
+            try {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                const timings = data.data.timings;
+                const hijri = data.data.date.hijri;
+                const gregorian = data.data.date.gregorian;
+
+                document.getElementById('dayName').textContent = 'يوم ' + hijri.weekday.ar;
+                document.getElementById('hijriDate').textContent = `${hijri.day} ${hijri.month.ar} ${hijri.year} هـ`;
+                document.getElementById('gregorianDate').textContent = gregorian.date + ' م';
+
+                const method = data.data.meta.method;
+                if (method) {
+                    document.getElementById('locationInfo').textContent = method.name;
+                }
+
+                timings['LastThird'] = calculateLastThird(timings['Maghrib'], timings['Fajr']);
+
+                const current = getCurrentPrayer(timings);
+                const prayers = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha', 'LastThird'];
+
+                let html = '<div class="prayer-card">';
+                prayers.forEach(p => {
+                    const isCurrent = p === current;
+                    const isSunrise = p === 'Sunrise';
+                    const isLastThird = p === 'LastThird';
+                    const label = isLastThird ? 'الثلث الأخير' : PRAYER_NAMES[p];
+                    const cls = isCurrent ? 'prayer-row current' : isSunrise ? 'prayer-row sunrise' : 'prayer-row';
+                    const time = isLastThird ? format12(timings[p]) : format12(timings[p]);
+
+                    if (isLastThird) {
+                        html += `<div class="prayer-row" style="border-top: 1px solid var(--border); opacity: 0.7;">
+                            <span class="prayer-name" style="font-size: 1rem;">${label}</span>
+                            <span class="prayer-time" style="font-size: 0.95rem;">${time}</span>
+                        </div>`;
+                    } else {
+                        html += `<div class="${cls}">
+                            <span class="prayer-name">${label}</span>
+                            <span class="prayer-time">${time}</span>
+                        </div>`;
+                    }
+                });
+                html += '</div>';
+
+                document.getElementById('prayer-container').innerHTML = html;
+            } catch (err) {
+                document.getElementById('prayer-container').innerHTML =
+                    '<div class="empty-state">حدث خطأ أثناء تحميل المواقيت</div>';
+            }
+        }
+
+        loadPrayerTimes();
+        setInterval(loadPrayerTimes, 3600000);
+    </script>
+
+</body>
+</html>
