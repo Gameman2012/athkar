@@ -259,7 +259,9 @@
     </div>
 
     <script>
-        const API_URL = 'https://api.aladhan.com/v1/timingsByIp?method=2';
+        const GEO_URL = 'https://ipwho.is/';
+        const API_BASE = 'https://api.aladhan.com/v1/timingsByCity';
+        const METHOD = 2;
 
         const PRAYER_NAMES = {
             'Fajr': 'الفجر',
@@ -313,7 +315,18 @@
 
         async function loadPrayerTimes() {
             try {
-                const res = await fetch(API_URL);
+                let city = 'Cairo', country = 'Egypt';
+                try {
+                    const geo = await fetch(GEO_URL);
+                    const geoData = await geo.json();
+                    if (geoData.success && geoData.city && geoData.country) {
+                        city = geoData.city;
+                        country = geoData.country;
+                    }
+                } catch {}
+
+                const url = `${API_BASE}?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}&method=${METHOD}`;
+                const res = await fetch(url);
                 const data = await res.json();
                 const timings = data.data.timings;
                 const hijri = data.data.date.hijri;
@@ -322,11 +335,7 @@
                 document.getElementById('dayName').textContent = 'يوم ' + hijri.weekday.ar;
                 document.getElementById('hijriDate').textContent = `${hijri.day} ${hijri.month.ar} ${hijri.year} هـ`;
                 document.getElementById('gregorianDate').textContent = gregorian.date + ' م';
-
-                const method = data.data.meta.method;
-                if (method) {
-                    document.getElementById('locationInfo').textContent = method.name;
-                }
+                document.getElementById('locationInfo').textContent = `${city} — ${country}`;
 
                 timings['LastThird'] = calculateLastThird(timings['Maghrib'], timings['Fajr']);
 

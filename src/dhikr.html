@@ -218,7 +218,9 @@
 
     <script>
         const DATA_URL = 'https://raw.githubusercontent.com/Gameman2012/athkar/main/data/adhkar.json';
-        const PRAYER_API = 'https://api.aladhan.com/v1/timingsByIp';
+        const GEO_URL = 'https://ipwho.is/';
+        const PRAYER_BASE = 'https://api.aladhan.com/v1/timingsByCity';
+        const METHOD = 2;
 
         let allAdhkar = [];
 
@@ -231,11 +233,25 @@
             return now >= minutes && now <= minutes + 30;
         }
 
+        async function getPrayerTimings() {
+            let city = 'Cairo', country = 'Egypt';
+            try {
+                const geo = await fetch(GEO_URL);
+                const geoData = await geo.json();
+                if (geoData.success && geoData.city && geoData.country) {
+                    city = geoData.city;
+                    country = geoData.country;
+                }
+            } catch {}
+            const url = `${PRAYER_BASE}?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}&method=${METHOD}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            return data.data.timings;
+        }
+
         async function getTag() {
             try {
-                const res = await fetch(PRAYER_API);
-                const data = await res.json();
-                const t = data.data.timings;
+                const t = await getPrayerTimings();
                 const now = new Date();
                 const mins = now.getHours() * 60 + now.getMinutes();
 
