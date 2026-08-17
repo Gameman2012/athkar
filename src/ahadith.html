@@ -270,22 +270,34 @@
     </div>
 
     <script>
-        const DATA_URL = 'https://raw.githubusercontent.com/Gameman2012/athkar/main/data/ahadith.json';
+        const DATA_URLS = [
+            'https://raw.githubusercontent.com/Gameman2012/athkar/main/data/ahadith.json',
+            '../data/ahadith.json'
+        ];
 
         let allAhadith = [];
         let activeTag = 'الكل';
 
         async function loadAhadith() {
-            try {
-                const res = await fetch(DATA_URL);
-                const data = await res.json();
-                allAhadith = data.ahadith;
-                renderFilters(data.tags);
-                renderAhadith(allAhadith);
-            } catch (err) {
+            let data = null;
+            for (const url of DATA_URLS) {
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) continue;
+                    data = await res.json();
+                    break;
+                } catch {}
+            }
+
+            if (!data) {
                 document.getElementById('hadith-container').innerHTML =
                     '<div class="empty-state">حدث خطأ أثناء تحميل البيانات</div>';
+                return;
             }
+
+            allAhadith = data.ahadith;
+            renderFilters(data.tags);
+            renderAhadith(allAhadith);
         }
 
         function renderFilters(tags) {

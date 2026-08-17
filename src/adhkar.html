@@ -265,22 +265,34 @@
     </div>
 
     <script>
-        const DATA_URL = 'https://raw.githubusercontent.com/Gameman2012/athkar/main/data/adhkar.json';
+        const DATA_URLS = [
+            'https://raw.githubusercontent.com/Gameman2012/athkar/main/data/adhkar.json',
+            '../data/adhkar.json'
+        ];
 
         let allAdhkar = [];
         let activeTag = 'الكل';
 
         async function loadAdhkar() {
-            try {
-                const res = await fetch(DATA_URL);
-                const data = await res.json();
-                allAdhkar = data.adhkar;
-                renderFilters(data.tags);
-                renderAdhkar(allAdhkar);
-            } catch (err) {
+            let data = null;
+            for (const url of DATA_URLS) {
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) continue;
+                    data = await res.json();
+                    break;
+                } catch {}
+            }
+
+            if (!data) {
                 document.getElementById('dhikr-container').innerHTML =
                     '<div class="empty-state">حدث خطأ أثناء تحميل البيانات</div>';
+                return;
             }
+
+            allAdhkar = data.adhkar;
+            renderFilters(data.tags);
+            renderAdhkar(allAdhkar);
         }
 
         function renderFilters(tags) {
