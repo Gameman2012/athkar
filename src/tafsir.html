@@ -20,6 +20,10 @@
             <h1>تدبر آية</h1>
         </header>
 
+        <div class="dropdown" style="margin-bottom:16px">
+            <select id="ayahSelect" onchange="loadAyah(parseInt(this.value))"></select>
+        </div>
+
         <div id="content">
             <div class="loading">
                 <div class="spinner"></div>
@@ -65,8 +69,17 @@
         const API = 'https://api.alquran.cloud/v1/ayah';
 
         const content = document.getElementById('content');
+        const ayahSelect = document.getElementById('ayahSelect');
         let currentAudio = null;
         let playingBtn = null;
+
+        // populate dropdown
+        AYAHS.forEach((a,i)=>{
+            const opt=document.createElement('option');
+            opt.value=i;
+            opt.textContent=a.ref;
+            ayahSelect.appendChild(opt);
+        });
 
         function getRandomIndex() {
             return Math.floor(Math.random() * AYAHS.length);
@@ -88,6 +101,7 @@
 
         async function loadAyah(index) {
             const ayah = AYAHS[index];
+            ayahSelect.value = index;
             content.innerHTML = '<div class="loading"><div class="spinner"></div><div>جارٍ تحميل الآية...</div></div>';
 
             try {
