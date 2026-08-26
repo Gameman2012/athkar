@@ -3,125 +3,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أذكار وأدعية — نور</title>
+    <title>أذكار — نور</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../design sys/style.css">
+    <style>
+        @property --progress {
+            syntax: "<percentage>";
+            inherits: false;
+            initial-value: 0%;
+        }
+
+        /* Category Cards - OSRC Style */
+        .categories-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .category-card {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            padding: 36px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            overflow: hidden;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .category-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--gold-dim);
+            transform: scale(1.02);
+        }
+
+        .category-card.active {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--bg-primary);
+        }
+
+        .category-card img {
+            position: absolute;
+            inset: 0;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .category-card:hover img {
+            opacity: 0.15;
+        }
+
+        .category-card.active img {
+            display: none;
+        }
+
+        .category-card span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .categories-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .stat-item { text-align: center; }
+
+        .stat-value {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .section-divider {
+            height: 1px;
+            width: 100%;
+            background: var(--border);
+            margin-bottom: 24px;
+        }
+
+        /* Zikr Card - Exact OSRC Style */
+        .zikr-card {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .zikr-card:hover {
+            border-color: var(--gold-dim);
+        }
+
+        .zikr-card.completed {
+            border-color: var(--green);
+            background: rgba(45, 106, 79, 0.08);
+        }
+
+        .zikr-text {
+            border-radius: 12px;
+            background: var(--bg-primary);
+            padding: 20px;
+            font-family: 'Amiri', serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            line-height: 2.25;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .zikr-count {
+            margin-top: 16px;
+            font-size: 0.875rem;
+            color: var(--gold);
+        }
+
+        .zikr-footer {
+            margin-top: 24px;
+            text-align: right;
+            font-size: 0.875rem;
+            line-height: 1.75;
+            color: var(--text-secondary);
+        }
+
+        .zikr-footer p { margin-bottom: 8px; }
+        .zikr-footer .label { font-weight: 600; color: var(--gold); }
+
+        /* Counter Button - Exact OSRC Style */
+        .counter-btn {
+            position: relative;
+            margin-top: 24px;
+            display: flex;
+            height: 56px;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .counter-btn.active {
+            background: var(--gold);
+            color: var(--bg-primary);
+        }
+
+        .counter-btn:not(.active) {
+            background: var(--border);
+        }
+
+        .counter-btn:not(.active):hover {
+            background: var(--gold-dim);
+        }
+
+        .counter-btn:disabled {
+            cursor: default;
+        }
+
+        /* Progress Circle - Exact OSRC Style */
+        .progress-circle {
+            position: absolute;
+            right: 16px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: conic-gradient(var(--gold) var(--progress), var(--border) var(--progress));
+            transition: --progress 0.5s ease;
+        }
+
+        .progress-circle-inner {
+            position: absolute;
+            inset: 3px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .counter-btn.active .progress-circle-inner {
+            background: var(--gold);
+        }
+
+        /* Reset Button - Exact OSRC Style */
+        .reset-btn {
+            margin-top: 12px;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        /* Back to Categories */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .zikr-card { padding: 20px; }
+            .zikr-text { font-size: 1rem; line-height: 2; padding: 16px; }
+            .stats-bar { gap: 16px; }
+            .stat-value { font-size: 1.2rem; }
+            .category-card { padding: 28px; font-size: 1rem; }
+        }
+    </style>
 </head>
 <body>
 
     <div class="container">
         <header>
             <a href="index.html" class="back-link">→</a>
-            <h1>أذكار وأدعية</h1>
+            <h1>أذكار</h1>
         </header>
 
-        <div class="filters" id="filters"></div>
+        <!-- Categories View -->
+        <div id="categories-view">
+            <p class="categories-subtitle">اختر تصنيف الأذكار التي ستقرأها</p>
+            <div class="categories-grid" id="categoriesGrid"></div>
+        </div>
 
-        <div id="dhikr-container">
-            <div class="loading">
-                <div class="spinner"></div>
-                <div>جارٍ التحميل...</div>
+        <!-- Zikr View (hidden by default) -->
+        <div id="zikr-view" style="display:none;">
+            <button class="back-btn" onclick="showCategories()">← العودة للأقسام</button>
+
+            <h2 class="section-title" id="sectionTitle"></h2>
+            <div class="section-divider"></div>
+
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalCount">0</div>
+                    <div class="stat-label">إجمالي</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="completedCount">0</div>
+                    <div class="stat-label">مكتمل</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="remainingCount">0</div>
+                    <div class="stat-label">متبقي</div>
+                </div>
             </div>
+
+            <div id="zikr-container" style="display:flex;flex-direction:column;gap:24px;padding-bottom:80px;"></div>
         </div>
     </div>
 
     <script>
-        const DATA_URL = 'https://raw.githubusercontent.com/Gameman2012/athkar/main/data/adhkar.json';
-        const CACHE_KEY = 'adhkar_cache';
-        const CACHE_TTL = 24 * 60 * 60 * 1000;
+        // ========== CONFIG ==========
+        const BASE_URL = 'https://raw.githubusercontent.com/Gameman2012/athkar/main/data/';
+        const CATEGORIES = [
+            { key: 'morningAzkar', label: 'أذكار الصباح', gif: 'https://raw.githubusercontent.com/suss200/osrc-zikr/main/public/morning.gif' },
+            { key: 'nightAzkar', label: 'أذكار المساء', gif: 'https://raw.githubusercontent.com/suss200/osrc-zikr/main/public/night.gif' },
+            { key: 'sleepAzkar', label: 'أذكار النوم', gif: 'https://raw.githubusercontent.com/suss200/osrc-zikr/main/public/sleep.gif' },
+            { key: 'tasbih', label: 'تسابيح', gif: '' },
+            { key: 'duas', label: 'أدعية', gif: '' },
+            { key: 'prayerAzkar', label: 'أذكار الصلاة', gif: '' },
+            { key: 'miscAzkar', label: 'أذكار متنوعة', gif: '' }
+        ];
+        const STORAGE_KEY = 'athkar_progress';
 
-        let allAdhkar = [];
-        let activeTag = 'الكل';
+        // ========== STATE ==========
+        let allData = {};
+        let currentCategory = null;
+        let progress = {};
 
-        function getCached() {
+        // ========== STORAGE ==========
+        function loadProgress() {
             try {
-                const c = JSON.parse(localStorage.getItem(CACHE_KEY));
-                if (c && Date.now() - c.ts < CACHE_TTL) return c.data;
-            } catch {}
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) progress = JSON.parse(saved);
+            } catch (e) { progress = {}; }
+        }
+
+        function saveProgress() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            } catch (e) {}
+        }
+
+        // ========== DATA ==========
+        async function loadAllSources() {
+            try {
+                const promises = CATEGORIES.map(async (cat) => {
+                    try {
+                        const res = await fetch(BASE_URL + cat.key + '.json');
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                        const data = await res.json();
+                        allData[cat.key] = data.adhkar || [];
+                    } catch (e) {
+                        console.warn(`Failed to load ${cat.key}:`, e);
+                        allData[cat.key] = [];
+                    }
+                });
+
+                await Promise.all(promises);
+                loadProgress();
+                renderCategories();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // ========== CATEGORIES VIEW ==========
+        function renderCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = CATEGORIES.map(cat => {
+                const count = (allData[cat.key] || []).length;
+                const imgTag = cat.gif ? `<img src="${cat.gif}" alt="">` : '';
+                return `
+                <div class="category-card" onclick="selectCategory('${cat.key}')">
+                    ${imgTag}
+                    <span>${cat.label} (${count})</span>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function selectCategory(key) {
+            currentCategory = key;
+            const cat = CATEGORIES.find(c => c.key === key);
+            document.getElementById('sectionTitle').textContent = cat.label;
+            document.getElementById('categories-view').style.display = 'none';
+            document.getElementById('zikr-view').style.display = 'block';
+            updateStats();
+            renderZikr();
+        }
+
+        function showCategories() {
+            document.getElementById('categories-view').style.display = 'block';
+            document.getElementById('zikr-view').style.display = 'none';
+            currentCategory = null;
+        }
+
+        // ========== STATS ==========
+        function updateStats() {
+            const all = allData[currentCategory] || [];
+            const total = all.length;
+            const completed = all.filter(d => {
+                const p = progress[d.id];
+                return p && p.count >= d.count;
+            }).length;
+
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('remainingCount').textContent = total - completed;
+        }
+
+        // ========== RENDER ZIKR - OSRC Style ==========
+        function renderZikr() {
+            const container = document.getElementById('zikr-container');
+            const all = allData[currentCategory] || [];
+
+            if (all.length === 0) {
+                container.innerHTML = '<div class="empty-state">لا أذكار في هذا القسم</div>';
+                return;
+            }
+
+            container.innerHTML = all.map(d => {
+                const p = progress[d.id] || { count: 0 };
+                const current = Math.min(p.count || 0, d.count);
+                const isComplete = current >= d.count;
+                const percent = d.count > 0 ? (current / d.count) * 100 : 0;
+
+                return `
+                <div class="zikr-card ${isComplete ? 'completed' : ''}" data-id="${d.id}">
+                    
+                    <div class="zikr-text">${d.text}</div>
+
+                    <div class="zikr-count">${d.count} مرات</div>
+
+                    ${(d.source || d.footer) ? `
+                    <div class="zikr-footer">
+                        ${d.footer ? `<p><span class="label">فضله:</span> ${d.footer}</p>` : ''}
+                        ${d.source ? `<p><span class="label">صحته:</span> ${d.source}</p>` : ''}
+                    </div>
+                    ` : ''}
+
+                    <button
+                        onclick="countZikr('${d.id}')"
+                        ${isComplete ? 'disabled' : ''}
+                        class="counter-btn ${isComplete ? '' : 'active'}"
+                    >
+                        <span>
+                            ${isComplete
+                                ? 'تم الذكر ✓'
+                                : `اضغط لاحتساب المرات · ${current}`
+                            }
+                        </span>
+                        <div class="progress-circle" style="--progress:${percent}%">
+                            <div class="progress-circle-inner"></div>
+                        </div>
+                    </button>
+
+                    <button
+                        onclick="resetZikr('${d.id}')"
+                        class="reset-btn"
+                    >
+                        ↻ إعادة العد
+                    </button>
+
+                </div>
+                `;
+            }).join('');
+        }
+
+        // ========== COUNTER ==========
+        function countZikr(id) {
+            if (!progress[id]) progress[id] = { count: 0 };
+            const zikr = findZikr(id);
+            if (!zikr) return;
+
+            if (progress[id].count < zikr.count) {
+                progress[id].count++;
+                saveProgress();
+                updateStats();
+                renderZikr();
+            }
+        }
+
+        function resetZikr(id) {
+            progress[id] = { count: 0 };
+            saveProgress();
+            updateStats();
+            renderZikr();
+        }
+
+        function findZikr(id) {
+            for (const source of Object.values(allData)) {
+                const found = source.find(d => d.id === id);
+                if (found) return found;
+            }
             return null;
         }
 
-        function setCache(data) {
-            try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
-        }
-
-        async function loadAdhkar() {
-            const cached = getCached();
-            if (cached) {
-                allAdhkar = cached.adhkar;
-                renderFilters(cached.tags);
-                renderAdhkar(allAdhkar);
-                return;
-            }
-            try {
-                const res = await fetch(DATA_URL);
-                const data = await res.json();
-                setCache(data);
-                allAdhkar = data.adhkar;
-                renderFilters(data.tags);
-                renderAdhkar(allAdhkar);
-            } catch (err) {
-                document.getElementById('dhikr-container').innerHTML =
-                    '<div class="empty-state">حدث خطأ أثناء تحميل البيانات</div>';
-            }
-        }
-
-        function renderFilters(tags) {
-            const container = document.getElementById('filters');
-            const allBtn = document.createElement('button');
-            allBtn.className = 'filter-btn active';
-            allBtn.textContent = 'الكل';
-            allBtn.onclick = () => filterByTag('الكل');
-            container.appendChild(allBtn);
-
-            tags.forEach(tag => {
-                const btn = document.createElement('button');
-                btn.className = 'filter-btn';
-                btn.textContent = tag;
-                btn.onclick = () => filterByTag(tag);
-                container.appendChild(btn);
-            });
-        }
-
-        function filterByTag(tag) {
-            activeTag = tag;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent === tag);
-            });
-
-            if (tag === 'الكل') {
-                renderAdhkar(allAdhkar);
-            } else {
-                const filtered = allAdhkar.filter(d => d.tags.includes(tag));
-                renderAdhkar(filtered);
-            }
-        }
-
-        function renderAdhkar(adhkar) {
-            const container = document.getElementById('dhikr-container');
-
-            if (adhkar.length === 0) {
-                container.innerHTML = '<div class="empty-state">لا أذكار في هذا التصنيف</div>';
-                return;
-            }
-
-            container.innerHTML = '<div class="dhikr-list">' + adhkar.map(d => `
-                <div class="dhikr-card">
-                    <div class="dhikr-text">${d.text}</div>
-                    <div class="dhikr-meta">
-                        <span class="dhikr-count">التكرار: ${d.count}</span>
-                        <span class="dhikr-source">${d.source}</span>
-                        <div class="dhikr-tags">
-                            ${d.tags.map(t => `<span class="dhikr-tag">${t}</span>`).join('')}
-                        </div>
-                    </div>
-                    ${d.footer ? `<div class="dhikr-footer">${d.footer}</div>` : ''}
-                </div>
-            `).join('') + '</div>';
-        }
-
-        loadAdhkar();
+        // ========== INIT ==========
+        loadAllSources();
     </script>
 
 </body>
