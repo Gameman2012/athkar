@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نور — Design System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========== RESET ========== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ========== CSS VARIABLES ========== */
+        :root {
+            /* Backgrounds */
+            --bg-primary: #0a0e1a;
+            --bg-card: #111827;
+            --bg-card-hover: #1a2332;
+
+            /* Gold (Brand) */
+            --gold: #d4a843;
+            --gold-light: #f0d48a;
+            --gold-dim: #8a6d2b;
+
+            /* Text */
+            --text-primary: #e8e0d0;
+            --text-secondary: #9a917e;
+
+            /* Border */
+            --border: #1e293b;
+
+            /* Green (Accent) */
+            --green: #2d6a4f;
+            --green-light: #40916c;
+
+            /* Semantic */
+            --weak: #e57373;
+            --weak-bg: rgba(180, 60, 60, 0.1);
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+
+            /* Radius */
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-pill: 24px;
+            --radius-full: 50%;
+
+            /* Shadows */
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(212, 168, 67, 0.05);
+            --shadow-glow: 0 0 40px rgba(212, 168, 67, 0.2);
+        }
+
+        body {
+            font-family: 'Noto Naskh Arabic', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(212, 168, 67, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(45, 106, 79, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ========== LAYOUT ========== */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== NAVIGATION ========== */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+        }
+
+        .nav-inner {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .nav-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .nav-btn.active {
+            background: rgba(212, 168, 67, 0.12);
+        }
+
+        /* ========== SECTIONS ========== */
+        .section {
+            padding: 48px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* ========== COLORS ========== */
+        .colors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .color-swatch {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .color-box {
+            height: 80px;
+        }
+
+        .color-info {
+            padding: 12px;
+            background: var(--bg-card);
+        }
+
+        .color-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .color-hex {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+
+        /* ========== TYPOGRAPHY ========== */
+        .type-sample {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .type-label {
+            font-size: 0.75rem;
+            color: var(--gold-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .type-font {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-family: monospace;
+        }
+
+        /* ========== BUTTONS ========== */
+        .buttons-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            border: none;
+            color: var(--bg-primary);
+            padding: 10px 28px;
+            border-radius: var(--radius-pill);
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+        }
+
+        .btn-secondary {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 28px;
+            border-radius: var(--radius-pill);
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold-dim);
+            color: var(--text-primary);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--gold-dim);
+            border: 1px solid var(--border);
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .btn-circle {
+            background: rgba(212, 168, 67, 0.08);
+            border: 1px solid rgba(212, 168, 67, 0.2);
+            color: var(--gold);
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .btn-circle:hover {
+            background: rgba(212, 168, 67, 0.15);
+            border-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        .btn-circle.active {
+            background: var(--gold);
+            color: var(--bg-primary);
+            border-color: var(--gold);
+        }
+
+        .btn-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 20px;
+            border-radius: var(--radius-pill);
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-pill:hover {
+            border-color: var(--gold-dim);
+            color: var(--text-primary);
+        }
+
+        .btn-pill.active {
+            background: rgba(212, 168, 67, 0.12);
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .btn-code {
+            display: block;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-top: 12px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+        }
+
+        /* ========== CARDS ========== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20%;
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--gold-dim);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-full);
+            background: rgba(212, 168, 67, 0.08);
+            border: 1px solid rgba(212, 168, 67, 0.15);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            transition: all 0.4s ease;
+        }
+
+        .card:hover .card-icon {
+            background: rgba(212, 168, 67, 0.15);
+            border-color: var(--gold-dim);
+            transform: scale(1.05);
+        }
+
+        .card-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* ========== SPACING ========== */
+        .spacing-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .spacing-bar {
+            height: 24px;
+            background: rgba(212, 168, 67, 0.2);
+            border: 1px solid var(--gold-dim);
+            border-radius: 4px;
+        }
+
+        .spacing-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            min-width: 100px;
+            font-family: monospace;
+        }
+
+        /* ========== RADIUS ========== */
+        .radius-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 16px;
+        }
+
+        .radius-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .radius-preview {
+            width: 64px;
+            height: 64px;
+            background: rgba(212, 168, 67, 0.15);
+            border: 2px solid var(--gold-dim);
+            margin: 0 auto 12px;
+        }
+
+        .radius-name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .radius-value {
+            font-size: 0.75rem;
+            color: var(--gold-dim);
+            font-family: monospace;
+        }
+
+        /* ========== SHADOWS ========== */
+        .shadow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .shadow-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            text-align: center;
+        }
+
+        .shadow-name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .shadow-value {
+            font-size: 0.7rem;
+            color: var(--gold-dim);
+            font-family: monospace;
+            direction: ltr;
+        }
+
+        /* ========== COMPONENTS DEMO ========== */
+        .demo-dhikr {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            margin-bottom: 16px;
+        }
+
+        .demo-dhikr-text {
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            line-height: 2.2;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .demo-source {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .demo-tags {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .demo-tag {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== ANIMATIONS ========== */
+        .anim-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .anim-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .anim-preview {
+            width: 48px;
+            height: 48px;
+            background: var(--gold);
+            border-radius: var(--radius-full);
+            margin: 0 auto 16px;
+        }
+
+        .anim-spin .anim-preview {
+            animation: spin 0.8s linear infinite;
+        }
+
+        .anim-pulse .anim-preview {
+            animation: pulseRing 0.35s ease-out infinite;
+        }
+
+        .anim-bump .anim-preview {
+            animation: bump 0.12s ease-out;
+        }
+
+        .anim-fade .anim-preview {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseRing {
+            0%   { box-shadow: 0 0 0 0 rgba(212, 168, 67, 0.4); }
+            100% { box-shadow: 0 0 0 30px rgba(212, 168, 67, 0); }
+        }
+
+        @keyframes bump {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .anim-name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .anim-value {
+            font-size: 0.7rem;
+            color: var(--gold-dim);
+            font-family: monospace;
+            direction: ltr;
+        }
+
+        /* ========== CODE BLOCKS ========== */
+        .code-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+
+        .code-block .prop { color: var(--gold); }
+        .code-block .val { color: var(--green-light); }
+        .code-block .comment { color: var(--text-secondary); opacity: 0.6; }
+
+        /* ========== RESPONSIVE ========== */
+        .responsive-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .responsive-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            .responsive-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .responsive-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .responsive-value {
+            font-size: 0.75rem;
+            color: var(--gold-dim);
+            font-family: monospace;
+            direction: ltr;
+        }
+
+        /* ========== INCONSISTENCIES NOTE ========== */
+        .note-box {
+            background: rgba(212, 168, 67, 0.06);
+            border: 1px solid var(--gold-dim);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .note-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .note-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .note-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .note-list li {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .note-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* ========== BACK LINK ========== */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-dim);
+            text-decoration: none;
+            font-size: 1rem;
+            margin-bottom: 24px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <button class="nav-btn active" onclick="scrollToSection('colors')">الألوان</button>
+                <button class="nav-btn" onclick="scrollToSection('typography')">الخطوط</button>
+                <button class="nav-btn" onclick="scrollToSection('buttons')">الأزرار</button>
+                <button class="nav-btn" onclick="scrollToSection('cards')">الكروت</button>
+                <button class="nav-btn" onclick="scrollToSection('spacing')">المسافات</button>
+                <button class="nav-btn" onclick="scrollToSection('radius')">الزوايا</button>
+                <button class="nav-btn" onclick="scrollToSection('shadows')">الظلال</button>
+                <button class="nav-btn" onclick="scrollToSection('animations')">الحركات</button>
+                <button class="nav-btn" onclick="scrollToSection('components')">المكونات</button>
+                <button class="nav-btn" onclick="scrollToSection('responsive')">المتجاوب</button>
+                <button class="nav-btn" onclick="scrollToSection('notes')">الملاحظات</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="src/index.html" class="back-link">→ العودة للموقع</a>
+
+        <!-- ========== COLORS ========== -->
+        <section class="section" id="colors">
+            <h2 class="section-title">الألوان</h2>
+            <p class="section-desc">لوحة الألوان الأساسية للموقع — ذهبي مع خلفيات داكنة</p>
+
+            <div class="colors-grid">
+                <!-- Backgrounds -->
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #0a0e1a;"></div>
+                    <div class="color-info">
+                        <div class="color-name">الخلفية الأساسية</div>
+                        <div class="color-hex">#0a0e1a</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #111827;"></div>
+                    <div class="color-info">
+                        <div class="color-name">خلفية الكارت</div>
+                        <div class="color-hex">#111827</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #1a2332;"></div>
+                    <div class="color-info">
+                        <div class="color-name"> hovered</div>
+                        <div class="color-hex">#1a2332</div>
+                    </div>
+                </div>
+
+                <!-- Gold -->
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #d4a843;"></div>
+                    <div class="color-info">
+                        <div class="color-name">الذهبي الأساسي</div>
+                        <div class="color-hex">#d4a843</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #f0d48a;"></div>
+                    <div class="color-info">
+                        <div class="color-name">الذهبي الفاتح</div>
+                        <div class="color-hex">#f0d48a</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #8a6d2b;"></div>
+                    <div class="color-info">
+                        <div class="color-name">الذهبي الباهت</div>
+                        <div class="color-hex">#8a6d2b</div>
+                    </div>
+                </div>
+
+                <!-- Text -->
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #e8e0d0;"></div>
+                    <div class="color-info">
+                        <div class="color-name">النص الأساسي</div>
+                        <div class="color-hex">#e8e0d0</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #9a917e;"></div>
+                    <div class="color-info">
+                        <div class="color-name">النص الثانوي</div>
+                        <div class="color-hex">#9a917e</div>
+                    </div>
+                </div>
+
+                <!-- Border & Green -->
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #1e293b;"></div>
+                    <div class="color-info">
+                        <div class="color-name">الحدود</div>
+                        <div class="color-hex">#1e293b</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #2d6a4f;"></div>
+                    <div class="color-info">
+                        <div class="color-name">الأخضر</div>
+                        <div class="color-hex">#2d6a4f</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #40916c;"></div>
+                    <div class="color-info">
+                        <div class="color-name">الأخضر الفاتح</div>
+                        <div class="color-hex">#40916c</div>
+                    </div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-box" style="background: #e57373;"></div>
+                    <div class="color-info">
+                        <div class="color-name">ضعيف</div>
+                        <div class="color-hex">#e57373</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block">
+<span class="comment">/* CSS Variables */</span>
+<span class="prop">:root</span> {
+  <span class="prop">--bg-primary</span>: <span class="val">#0a0e1a</span>;
+  <span class="prop">--bg-card</span>: <span class="val">#111827</span>;
+  <span class="prop">--bg-card-hover</span>: <span class="val">#1a2332</span>;
+  <span class="prop">--gold</span>: <span class="val">#d4a843</span>;
+  <span class="prop">--gold-light</span>: <span class="val">#f0d48a</span>;
+  <span class="prop">--gold-dim</span>: <span class="val">#8a6d2b</span>;
+  <span class="prop">--text-primary</span>: <span class="val">#e8e0d0</span>;
+  <span class="prop">--text-secondary</span>: <span class="val">#9a917e</span>;
+  <span class="prop">--border</span>: <span class="val">#1e293b</span>;
+  <span class="prop">--green</span>: <span class="val">#2d6a4f</span>;
+  <span class="prop">--green-light</span>: <span class="val">#40916c</span>;
+}
+            </div>
+        </section>
+
+        <!-- ========== TYPOGRAPHY ========== -->
+        <section class="section" id="typography">
+            <h2 class="section-title">الخطوط</h2>
+            <p class="section-desc">خطين أساسيين — Amiri للعناوين و Noto Naskh Arabic للنصوص</p>
+
+            <div class="type-sample">
+                <div class="type-label">Logo — 3.5rem / 700</div>
+                <div style="font-family: 'Amiri', serif; font-size: 3.5rem; font-weight: 700; color: var(--gold);">
+                    نور
+                </div>
+                <div class="type-font">font-family: 'Amiri', serif; font-size: 3.5rem; font-weight: 700;</div>
+            </div>
+
+            <div class="type-sample">
+                <div class="type-label">Page Title — 2rem / 700</div>
+                <div style="font-family: 'Amiri', serif; font-size: 2rem; font-weight: 700; color: var(--gold);">
+                    أذكار الصباح
+                </div>
+                <div class="type-font">font-family: 'Amiri', serif; font-size: 2rem; font-weight: 700;</div>
+            </div>
+
+            <div class="type-sample">
+                <div class="type-label">Card Title — 1.4rem / 700</div>
+                <div style="font-family: 'Amiri', serif; font-size: 1.4rem; font-weight: 700; color: var(--gold);">
+                    أذكار الصباح والمساء
+                </div>
+                <div class="type-font">font-family: 'Amiri', serif; font-size: 1.4rem; font-weight: 700;</div>
+            </div>
+
+            <div class="type-sample">
+                <div class="type-label">Body Text — 1rem / 400</div>
+                <div style="font-family: 'Noto Naskh Arabic', serif; font-size: 1rem; line-height: 2.2;">
+                    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ — اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ
+                </div>
+                <div class="type-font">font-family: 'Noto Naskh Arabic', serif; font-size: 1rem; line-height: 2.2;</div>
+            </div>
+
+            <div class="type-sample">
+                <div class="type-label">Dhikr Text — 1.3rem / 400 / line-height: 2.2</div>
+                <div style="font-family: 'Amiri', serif; font-size: 1.3rem; line-height: 2.2; color: var(--text-primary);">
+                    اللّهُـمَّ إِنِّـي أَمسيتُ أُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلَائِكَتَكَ ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك
+                </div>
+                <div class="type-font">font-family: 'Amiri', serif; font-size: 1.3rem; line-height: 2.2;</div>
+            </div>
+
+            <div class="type-sample">
+                <div class="type-label">Meta / Source — 0.8rem / 400</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                    رواه مسلم — كتاب الصلاة — باب الترغيب في صلاة الفجر
+                </div>
+                <div class="type-font">font-size: 0.8rem; color: var(--text-secondary);</div>
+            </div>
+
+            <div class="type-sample">
+                <div class="type-label">Tag — 0.7rem / 400</div>
+                <div style="display: flex; gap: 8px;">
+                    <span style="background: var(--bg-card-hover); border: 1px solid var(--border); border-radius: 12px; padding: 4px 12px; font-size: 0.7rem; color: var(--text-secondary);">أذكار الصباح</span>
+                    <span style="background: var(--bg-card-hover); border: 1px solid var(--border); border-radius: 12px; padding: 4px 12px; font-size: 0.7rem; color: var(--text-secondary);">أذكار المساء</span>
+                </div>
+                <div class="type-font">font-size: 0.7rem; border-radius: 12px; padding: 4px 12px;</div>
+            </div>
+        </section>
+
+        <!-- ========== BUTTONS ========== -->
+        <section class="section" id="buttons">
+            <h2 class="section-title">الأزرار</h2>
+            <p class="section-desc">أنماط الأزرار الأساسية — Primary, Secondary, Outline, Circle, Pill</p>
+
+            <h3 style="color: var(--gold); margin-bottom: 12px;">Primary</h3>
+            <div class="buttons-row">
+                <button class="btn-primary">نعم</button>
+                <button class="btn-primary">تحميل</button>
+                <button class="btn-primary">تشغيل</button>
+            </div>
+            <div class="code-block">
+<span class="prop">.btn-primary</span> {
+  <span class="prop">background</span>: <span class="val">var(--gold)</span>;
+  <span class="prop">border</span>: <span class="val">none</span>;
+  <span class="prop">color</span>: <span class="val">var(--bg-primary)</span>;
+  <span class="prop">padding</span>: <span class="val">10px 28px</span>;
+  <span class="prop">border-radius</span>: <span class="val">24px</span>;
+  <span class="prop">font-weight</span>: <span class="val">600</span>;
+}
+            </div>
+
+            <h3 style="color: var(--gold); margin: 24px 0 12px;">Secondary</h3>
+            <div class="buttons-row">
+                <button class="btn-secondary">لا</button>
+                <button class="btn-secondary">إلغاء</button>
+                <button class="btn-secondary">رجوع</button>
+            </div>
+            <div class="code-block">
+<span class="prop">.btn-secondary</span> {
+  <span class="prop">background</span>: <span class="val">none</span>;
+  <span class="prop">border</span>: <span class="val">1px solid var(--border)</span>;
+  <span class="prop">color</span>: <span class="val">var(--text-secondary)</span>;
+  <span class="prop">padding</span>: <span class="val">10px 28px</span>;
+  <span class="prop">border-radius</span>: <span class="val">24px</span>;
+}
+            </div>
+
+            <h3 style="color: var(--gold); margin: 24px 0 12px;">Outline</h3>
+            <div class="buttons-row">
+                <button class="btn-outline">إعادة العد</button>
+                <button class="btn-outline">تشغيل</button>
+                <button class="btn-outline"> آية جديدة</button>
+            </div>
+            <div class="code-block">
+<span class="prop">.btn-outline</span> {
+  <span class="prop">background</span>: <span class="val">transparent</span>;
+  <span class="prop">color</span>: <span class="val">var(--gold-dim)</span>;
+  <span class="prop">border</span>: <span class="val">1px solid var(--border)</span>;
+  <span class="prop">padding</span>: <span class="val">8px 20px</span>;
+  <span class="prop">border-radius</span>: <span class="val">10px</span>;
+}
+            </div>
+
+            <h3 style="color: var(--gold); margin: 24px 0 12px;">Circle</h3>
+            <div class="buttons-row">
+                <button class="btn-circle">▶</button>
+                <button class="btn-circle active">⏸</button>
+                <button class="btn-circle">⋮</button>
+                <button class="btn-circle">←</button>
+                <button class="btn-circle">→</button>
+            </div>
+            <div class="code-block">
+<span class="prop">.btn-circle</span> {
+  <span class="prop">background</span>: <span class="val">rgba(212, 168, 67, 0.08)</span>;
+  <span class="prop">border</span>: <span class="val">1px solid rgba(212, 168, 67, 0.2)</span>;
+  <span class="prop">color</span>: <span class="val">var(--gold)</span>;
+  <span class="prop">width</span>: <span class="val">44px</span>; <span class="prop">height</span>: <span class="val">44px</span>;
+  <span class="prop">border-radius</span>: <span class="val">50%</span>;
+}
+            </div>
+
+            <h3 style="color: var(--gold); margin: 24px 0 12px;">Pill (Filter)</h3>
+            <div class="buttons-row">
+                <button class="btn-pill active">أذكار الصباح</button>
+                <button class="btn-pill">أذكار المساء</button>
+                <button class="btn-pill">أذكار النوم</button>
+                <button class="btn-pill">أذكار بعد الصلاة</button>
+            </div>
+            <div class="code-block">
+<span class="prop">.btn-pill</span> {
+  <span class="prop">background</span>: <span class="val">var(--bg-card)</span>;
+  <span class="prop">border</span>: <span class="val">1px solid var(--border)</span>;
+  <span class="prop">color</span>: <span class="val">var(--text-secondary)</span>;
+  <span class="prop">padding</span>: <span class="val">8px 20px</span>;
+  <span class="prop">border-radius</span>: <span class="val">24px</span>;
+}
+<span class="comment">/* Active: */</span>
+<span class="prop">.btn-pill.active</span> {
+  <span class="prop">background</span>: <span class="val">rgba(212, 168, 67, 0.12)</span>;
+  <span class="prop">border-color</span>: <span class="val">var(--gold-dim)</span>;
+  <span class="prop">color</span>: <span class="val">var(--gold)</span>;
+}
+            </div>
+        </section>
+
+        <!-- ========== CARDS ========== -->
+        <section class="section" id="cards">
+            <h2 class="section-title">الكروت</h2>
+            <p class="section-desc">أنماط الكروت — Standard Card مع تأثير Hover</p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">🌅</div>
+                    <div class="card-title">أذكار الصباح</div>
+                    <div class="card-desc">أذكار يومية مختارة من القرآن والسنة</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌙</div>
+                    <div class="card-title">أذكار المساء</div>
+                    <div class="card-desc">حِصن المسلم في المساء</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📿</div>
+                    <div class="card-title">التسبيح</div>
+                    <div class="card-desc">سبحة رقمية مع عداد تفاعلي</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📖</div>
+                    <div class="card-title">القرآن الكريم</div>
+                    <div class="card-desc">قراءة واستماع مع أصوات متعددة</div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 24px;">
+<span class="prop">.card</span> {
+  <span class="prop">background</span>: <span class="val">var(--bg-card)</span>;
+  <span class="prop">border</span>: <span class="val">1px solid var(--border)</span>;
+  <span class="prop">border-radius</span>: <span class="val">16px</span>;
+  <span class="prop">padding</span>: <span class="val">40px 32px</span>;
+  <span class="prop">text-align</span>: <span class="val">center</span>;
+  <span class="prop">transition</span>: <span class="val">all 0.4s ease</span>;
+  <span class="prop">position</span>: <span class="val">relative</span>;
+  <span class="prop">overflow</span>: <span class="val">hidden</span>;
+}
+<span class="comment">/* Hover: */</span>
+<span class="prop">.card:hover</span> {
+  <span class="prop">background</span>: <span class="val">var(--bg-card-hover)</span>;
+  <span class="prop">border-color</span>: <span class="val">var(--gold-dim)</span>;
+  <span class="prop">transform</span>: <span class="val">translateY(-4px)</span>;
+  <span class="prop">box-shadow</span>: <span class="val">0 12px 40px rgba(0,0,0,0.3), 0 0 60px rgba(212,168,67,0.05)</span>;
+}
+            </div>
+        </section>
+
+        <!-- ========== SPACING ========== -->
+        <section class="section" id="spacing">
+            <h2 class="section-title">المسافات</h2>
+            <p class="section-desc">نظام المسافات الموحد</p>
+
+            <div class="spacing-row">
+                <div class="spacing-label">--space-xs: 4px</div>
+                <div class="spacing-bar" style="width: 4px;"></div>
+            </div>
+            <div class="spacing-row">
+                <div class="spacing-label">--space-sm: 8px</div>
+                <div class="spacing-bar" style="width: 8px;"></div>
+            </div>
+            <div class="spacing-row">
+                <div class="spacing-label">--space-md: 16px</div>
+                <div class="spacing-bar" style="width: 16px;"></div>
+            </div>
+            <div class="spacing-row">
+                <div class="spacing-label">--space-lg: 24px</div>
+                <div class="spacing-bar" style="width: 24px;"></div>
+            </div>
+            <div class="spacing-row">
+                <div class="spacing-label">--space-xl: 32px</div>
+                <div class="spacing-bar" style="width: 32px;"></div>
+            </div>
+            <div class="spacing-row">
+                <div class="spacing-label">--space-2xl: 48px</div>
+                <div class="spacing-bar" style="width: 48px;"></div>
+            </div>
+
+            <div class="code-block" style="margin-top: 24px;">
+<span class="prop">:root</span> {
+  <span class="prop">--space-xs</span>: <span class="val">4px</span>;
+  <span class="prop">--space-sm</span>: <span class="val">8px</span>;
+  <span class="prop">--space-md</span>: <span class="val">16px</span>;
+  <span class="prop">--space-lg</span>: <span class="val">24px</span>;
+  <span class="prop">--space-xl</span>: <span class="val">32px</span>;
+  <span class="prop">--space-2xl</span>: <span class="val">48px</span>;
+}
+            </div>
+        </section>
+
+        <!-- ========== RADIUS ========== -->
+        <section class="section" id="radius">
+            <h2 class="section-title">الزوايا</h2>
+            <p class="section-desc">قيم Border Radius المستخدمة</p>
+
+            <div class="radius-grid">
+                <div class="radius-box">
+                    <div class="radius-preview" style="border-radius: 10px;"></div>
+                    <div class="radius-name">SM</div>
+                    <div class="radius-value">10px</div>
+                </div>
+                <div class="radius-box">
+                    <div class="radius-preview" style="border-radius: 12px;"></div>
+                    <div class="radius-name">MD</div>
+                    <div class="radius-value">12px</div>
+                </div>
+                <div class="radius-box">
+                    <div class="radius-preview" style="border-radius: 16px;"></div>
+                    <div class="radius-name">CARD</div>
+                    <div class="radius-value">16px</div>
+                </div>
+                <div class="radius-box">
+                    <div class="radius-preview" style="border-radius: 20px;"></div>
+                    <div class="radius-name">LG</div>
+                    <div class="radius-value">20px</div>
+                </div>
+                <div class="radius-box">
+                    <div class="radius-preview" style="border-radius: 24px;"></div>
+                    <div class="radius-name">PILL</div>
+                    <div class="radius-value">24px</div>
+                </div>
+                <div class="radius-box">
+                    <div class="radius-preview" style="border-radius: 50%;"></div>
+                    <div class="radius-name">FULL</div>
+                    <div class="radius-value">50%</div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 24px;">
+<span class="prop">:root</span> {
+  <span class="prop">--radius-sm</span>: <span class="val">10px</span>;      <span class="comment">/* Reset btn, action btn */</span>
+  <span class="prop">--radius-md</span>: <span class="val">16px</span>;      <span class="comment">/* Cards */</span>
+  <span class="prop">--radius-lg</span>: <span class="val">20px</span>;      <span class="comment">/* Hero, prayer card */</span>
+  <span class="prop">--radius-pill</span>: <span class="val">24px</span>;    <span class="comment">/* Filter btn, confirm btn */</span>
+  <span class="prop">--radius-full</span>: <span class="val">50%</span>;     <span class="comment">/* Circle btn, icon */</span>
+}
+            </div>
+        </section>
+
+        <!-- ========== SHADOWS ========== -->
+        <section class="section" id="shadows">
+            <h2 class="section-title">الظلال</h2>
+            <p class="section-desc">ظلال الكروت والعناصر</p>
+
+            <div class="shadow-grid">
+                <div class="shadow-box" style="box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);">
+                    <div class="shadow-name">Card</div>
+                    <div class="shadow-value">0 4px 24px rgba(0,0,0,0.3)</div>
+                </div>
+                <div class="shadow-box" style="box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 60px rgba(212, 168, 67, 0.05);">
+                    <div class="shadow-name">Card Hover</div>
+                    <div class="shadow-value">0 12px 40px + gold glow</div>
+                </div>
+                <div class="shadow-box" style="box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);">
+                    <div class="shadow-name">Quran Image</div>
+                    <div class="shadow-value">0 20px 50px rgba(0,0,0,0.7)</div>
+                </div>
+                <div class="shadow-box" style="box-shadow: 0 0 40px rgba(212, 168, 67, 0.2);">
+                    <div class="shadow-name">Logo Glow</div>
+                    <div class="shadow-value">0 0 40px rgba(212,168,67,0.2)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== ANIMATIONS ========== -->
+        <section class="section" id="animations">
+            <h2 class="section-title">الحركات</h2>
+            <p class="section-desc">الحركات والتحولات المستخدمة</p>
+
+            <div class="anim-grid">
+                <div class="anim-box anim-spin">
+                    <div class="anim-preview"></div>
+                    <div class="anim-name">Spin</div>
+                    <div class="anim-value">0.8s linear infinite</div>
+                </div>
+                <div class="anim-box anim-pulse">
+                    <div class="anim-preview"></div>
+                    <div class="anim-name">Pulse</div>
+                    <div class="anim-value">0.35s ease-out</div>
+                </div>
+                <div class="anim-box anim-bump">
+                    <div class="anim-preview"></div>
+                    <div class="anim-name">Bump</div>
+                    <div class="anim-value">0.12s ease-out</div>
+                </div>
+                <div class="anim-box anim-fade">
+                    <div class="anim-preview"></div>
+                    <div class="anim-name">Fade In</div>
+                    <div class="anim-value">0.8s ease forwards</div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 24px;">
+<span class="comment">/* Transitions */</span>
+<span class="prop">transition</span>: <span class="val">all 0.4s ease</span>;    <span class="comment">/* Cards */</span>
+<span class="prop">transition</span>: <span class="val">all 0.3s</span>;          <span class="comment">/* Buttons, dhikr card */</span>
+<span class="prop">transition</span>: <span class="val">color 0.3s</span>;        <span class="comment">/* Back link */</span>
+
+<span class="comment">/* Active press */</span>
+<span class="prop">transform</span>: <span class="val">scale(0.96)</span>;       <span class="comment">/* Button press */</span>
+<span class="prop">transform</span>: <span class="val">scale(1.05)</span>;       <span class="comment">/* Icon hover */</span>
+            </div>
+        </section>
+
+        <!-- ========== COMPONENTS ========== -->
+        <section class="section" id="components">
+            <h2 class="section-title">المكونات</h2>
+            <p class="section-desc">أمثلة حية على المكونات المستخدمة</p>
+
+            <!-- Dhikr Card -->
+            <h3 style="color: var(--gold); margin-bottom: 16px;">Card — ذكر</h3>
+            <div class="demo-dhikr">
+                <div class="demo-dhikr-text">
+                    اللّهُـمَّ إِنِّـي أَمسيتُ أُشْـهِدُك ، وَأُشْـهِدُ حَمَلَـةَ عَـرْشِـك ، وَمَلَائِكَتَكَ ، وَجَمـيعَ خَلْـقِك ، أَنَّـكَ أَنْـتَ اللهُ لا إلهَ إلاّ أَنْـتَ وَحْـدَكَ لا شَريكَ لَـك ، وَأَنَّ ُ مُحَمّـداً عَبْـدُكَ وَرَسـولُـك
+                </div>
+                <div class="demo-source">رواه أبو داود — 5095</div>
+                <div class="demo-tags">
+                    <span class="demo-tag">أذكار المساء</span>
+                    <span class="demo-tag">شهادة</span>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <h3 style="color: var(--gold); margin: 24px 0 16px;">Bar — فلاتر</h3>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn-pill active">الكل</button>
+                <button class="btn-pill">أذكار الصباح</button>
+                <button class="btn-pill">أذكار المساء</button>
+                <button class="btn-pill">أذكار النوم</button>
+                <button class="btn-pill">أذكار بعد الصلاة</button>
+            </div>
+
+            <!-- Counter -->
+            <h3 style="color: var(--gold); margin: 24px 0 16px;">Counter — عداد</h3>
+            <div style="text-align: center;">
+                <div style="width: 200px; height: 200px; border-radius: 50%; border: 3px solid var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto; position: relative; background: conic-gradient(var(--gold) 0deg, var(--gold) 240deg, var(--border) 240deg, var(--border) 360deg);">
+                    <div style="width: 180px; height: 180px; border-radius: 50%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                        <div style="font-family: 'Amiri', serif; font-size: 3.5rem; font-weight: 700; color: var(--text-primary);">22</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">من 33</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio Bar -->
+            <h3 style="color: var(--gold); margin: 24px 0 16px;">Audio Bar — شريط الصوت</h3>
+            <div style="background: var(--bg-card); border-top: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 24px; display: flex; align-items: center; gap: 12px;">
+                <span style="flex: 1; font-size: 0.85rem; color: var(--text-secondary);">آية ٢٥٥ — آل عمران</span>
+                <button class="btn-circle" style="width: 40px; height: 40px; background: var(--gold); color: var(--bg-primary); border: none;">⏸</button>
+            </div>
+        </section>
+
+        <!-- ========== RESPONSIVE ========== -->
+        <section class="section" id="responsive">
+            <h2 class="section-title">المتجاوب</h2>
+            <p class="section-desc">نقاط التوقف والتغييرات عند الشاشات الصغيرة</p>
+
+            <div class="responsive-demo">
+                <div class="responsive-box">
+                    <div class="responsive-label">Desktop (> 640px)</div>
+                    <div class="responsive-value">Logo: 3.5rem</div>
+                    <div class="responsive-value">Title: 2rem</div>
+                    <div class="responsive-value">Grid: 2 columns</div>
+                    <div class="responsive-value">Card padding: 40px 32px</div>
+                    <div class="responsive-value">Ayah: 1.8rem</div>
+                </div>
+                <div class="responsive-box">
+                    <div class="responsive-label">Mobile (≤ 640px)</div>
+                    <div class="responsive-value">Logo: 2.5rem</div>
+                    <div class="responsive-value">Title: 1.5rem</div>
+                    <div class="responsive-value">Grid: 1 column</div>
+                    <div class="responsive-value">Card padding: 32px 24px</div>
+                    <div class="responsive-value">Ayah: 1.4rem</div>
+                </div>
+                <div class="responsive-box">
+                    <div class="responsive-label">Breakpoints</div>
+                    <div class="responsive-value">max-width: 640px</div>
+                    <div class="responsive-value">min-height: 800px</div>
+                    <div class="responsive-value">(misbaha only)</div>
+                </div>
+            </div>
+
+            <div class="code-block" style="margin-top: 24px;">
+<span class="comment">/* Mobile breakpoint */</span>
+<span class="prop">@media</span> (max-width: 640px) {
+  <span class="prop">header h1</span> { <span class="val">font-size: 1.5rem</span>; }
+  <span class="prop">.logo</span> { <span class="val">font-size: 2.5rem</span>; }
+  <span class="prop">.cards</span> { <span class="val">grid-template-columns: 1fr</span>; }
+  <span class="prop">.card</span> { <span class="val">padding: 32px 24px</span>; }
+  <span class="prop">.ayah-text</span> { <span class="val">font-size: 1.4rem</span>; }
+  <span class="prop">.filter-btn</span> { <span class="val">padding: 6px 14px; font-size: 0.8rem</span>; }
+}
+            </div>
+        </section>
+
+        <!-- ========== NOTES ========== -->
+        <section class="section" id="notes">
+            <h2 class="section-title">ملاحظات وتنبيهات</h2>
+            <p class="section-desc">مشاكل في التنسيق بين الصفحات يجب إصلاحها</p>
+
+            <div class="note-box">
+                <div class="note-title">⚠️ متغيرات CSS مفقودة في بعض الصفحات</div>
+                <div class="note-text">الصفحات التالية لا تحتوي جميع المتغيرات:</div>
+                <ul class="note-list">
+                    <li><strong>misbaha.html</strong> — لا يوجد: <code>--bg-card-hover</code>, <code>--green</code>, <code>--green-light</code></li>
+                    <li><strong>wird.html</strong> — لا يوجد: <code>--bg-card-hover</code>, <code>--green</code>, <code>--green-light</code></li>
+                    <li><strong>salah.html</strong> — لا يوجد: <code>--bg-card-hover</code>, <code>--green</code>, <code>--green-light</code></li>
+                    <li><strong>tafsir.html</strong> — لا يوجد: <code>--green-light</code></li>
+                </ul>
+            </div>
+
+            <div class="note-box">
+                <div class="note-title">⚠️ اختلاف Container Width</div>
+                <div class="note-text">كل صفحة تستخدم <code>max-width</code> مختلف:</div>
+                <ul class="note-list">
+                    <li><strong>index.html</strong> — 960px</li>
+                    <li><strong>adhkar, ahadith, dhikr, quran</strong> — 800px</li>
+                    <li><strong>tafsir</strong> — 700px</li>
+                    <li><strong>salah, misbaha</strong> — 600px</li>
+                    <li><strong>wird</strong> — بدون container (flex center)</li>
+                </ul>
+            </div>
+
+            <div class="note-box">
+                <div class="note-title">⚠️ اختلاف Spinner Animation</div>
+                <div class="note-text">معظم الصفحات: <code>0.8s</code> — wird.html: <code>1s</code></div>
+            </div>
+
+            <div class="note-box">
+                <div class="note-title">⚠️ CSS Reset مختلف في wird.html</div>
+                <div class="note-text">يستخدم <code>*</code> بدلاً من <code>*, *::before, *::after</code></div>
+            </div>
+
+            <div class="note-box">
+                <div class="note-title">💡 التوصية</div>
+                <div class="note-text">
+                    يجب إنشاء ملف <code>style.css</code> واحد يحتوي جميع المتغيرات والكلاسات الأساسية —
+                    ثم كل صفحة تربطه عبر <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 48px 0; color: var(--text-secondary); font-size: 0.85rem;">
+            <p style="font-family: 'Amiri', serif; font-size: 1.2rem; color: var(--gold); margin-bottom: 8px;">نور</p>
+            <p>Design System — آخر تحديث: ٢٠٢٦</p>
+        </div>
+    </div>
+
+    <script>
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Update active nav on scroll
+        const sections = document.querySelectorAll('.section');
+        const navBtns = document.querySelectorAll('.nav-btn');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick')?.includes(current)) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
